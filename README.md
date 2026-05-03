@@ -27,11 +27,14 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 git clone git@github.com:warsz/pi_webcam2.git
 cd pi_webcam2
 
-# Create venv — --system-site-packages is required for picamera2
-uv venv --system-site-packages .venv
+# Create venv — --system-site-packages is required so picamera2 (system package) is visible.
+# --python python3.13 is required because .python-version pins to 3.11 (set on Mac),
+# but picamera2 is installed under the system Python (3.13 on Debian 13).
+uv venv --system-site-packages --python python3.13 .venv
 source .venv/bin/activate
 
-uv pip install -r requirements.txt
+# Install from pyproject.toml (do not use -r requirements.txt)
+uv pip install -e .
 ```
 
 ## Configuration

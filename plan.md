@@ -145,14 +145,16 @@ Use `uv` for environment and package management. On the Pi, `picamera2` is a sys
 
 ```bash
 # On the Pi
-uv venv --system-site-packages .venv
+# --python python3.13 required: .python-version pins to 3.11 (set on Mac) but picamera2
+# is installed under system Python 3.13 on Debian 13. Version must match.
+uv venv --system-site-packages --python python3.13 .venv
 source .venv/bin/activate
-uv pip install -r requirements.txt
+uv pip install -e .   # reads pyproject.toml — do not use -r requirements.txt
 
 # On Mac (no picamera2)
 uv venv .venv
 source .venv/bin/activate
-uv pip install Pillow python-dotenv python-fasthtml
+uv pip install -e .
 ```
 
 ## Task list
@@ -174,6 +176,13 @@ uv pip install Pillow python-dotenv python-fasthtml
   - Identify approximate region coordinates by eye from the image
 
 - [ ] **T04** Smoke test on local Pi — capture a single frame, verify rotation and resolution
+  - **Session 1 findings** (needs resolving next session):
+    - Rotation: local Pi camera is mounted differently from cabin Pi — transform needs to be
+      configurable per device in `config.toml` (e.g. `transform = "hvflip"` vs `"vflip"` vs `"none"`)
+    - Resolution/FoV: requesting 1920x1080 crops the sensor center instead of using full FoV.
+      Fix: set `raw={"size": (3280, 2464)}` so ISP downscales full sensor → 1920x1080
+    - Red cast: local Pi camera shows strong red tint despite standard module tuning file.
+      Likely a NoIR module — confirm physically. Affects white balance strategy.
 
 ### Phase 2 — Calibration
 
@@ -230,3 +239,7 @@ uv pip install Pillow python-dotenv python-fasthtml
 3. **Cron schedule** — how often should snapshots run? (Old code implied hourly.)
 4. **Web UI hosting** — does the FastHTML app run on the Pi itself, or somewhere else?
 5. **`white_reference_region`** — exact coordinates TBD after running `find_region.py`.
+6. **Camera module confirmation** — physically check both Pi cameras: standard (blue-tinted glass)
+   or NoIR (black sensor window)? Local Pi showing red cast despite `imx219.json` tuning file.
+7. **Per-device transform config** — local Pi and cabin Pi have different camera mounting
+   orientations. `config.toml` needs a `transform` field, not a hardcoded assumption.
