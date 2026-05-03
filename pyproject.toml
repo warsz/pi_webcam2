@@ -1,0 +1,12 @@
+[project]
+name = "pi-webcam2"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+  "picamera2",
+  "Pillow",
+  "python-dotenv",
+  "python-fasthtml"
+]
