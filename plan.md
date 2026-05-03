@@ -120,6 +120,13 @@ sweep_colour_gains = [[1.0, 1.0], [1.5, 1.0], [1.0, 1.5], [2.0, 1.0], [1.0, 2.0]
 
 ---
 
+## Working approach
+
+See `APPROACH.md` for the full methodology. The short version:
+- One small step at a time, verified on real hardware before moving on
+- The human drives, the AI assists
+- Code is a thinking tool — write the minimum that makes the next thing visible
+
 ## Development workflow
 
 Code is written on Mac, deployed to the local Pi via git (clone + pull). The Pi runs the code
