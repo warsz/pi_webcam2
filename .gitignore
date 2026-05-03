@@ -1,0 +1,22 @@
+# Machine-generated config — contains calibration results
+calibration.toml
+
+# Secrets — FTP/SFTP credentials
+.env
+
+# Image output
+pictures/
+*.jpg
+*.jpeg
+*.png
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+*.egg-info/
+
+# macOS
+.DS_Store
