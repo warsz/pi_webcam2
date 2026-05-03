@@ -7,7 +7,10 @@ def main():
     # 1. open the camera: IMX219
     cam = Picamera2()
     # 2. configure rotation 180 degrees
-    config = cam.create_still_configuration(transform=Transform(vflip=True, hflip=True))
+    config = cam.create_still_configuration(
+        main={"size": (1920, 1080)},
+        transform=Transform(vflip=True, hflip=True))
+    pring(config)
     cam.configure(config)
 
     # 3. capture an image
