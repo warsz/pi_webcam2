@@ -137,6 +137,24 @@ During early phases (before FastHTML exists), images can be viewed immediately v
 python3 -m http.server 8080   # run in the image output folder on the Pi
 ```
 
+### Virtual environment
+
+Use `uv` for environment and package management. On the Pi, `picamera2` is a system package
+(installed via apt, depends on `libcamera`) and cannot be pip-installed. Use
+`--system-site-packages` so the venv can see it:
+
+```bash
+# On the Pi
+uv venv --system-site-packages .venv
+source .venv/bin/activate
+uv pip install -r requirements.txt
+
+# On Mac (no picamera2)
+uv venv .venv
+source .venv/bin/activate
+uv pip install Pillow python-dotenv python-fasthtml
+```
+
 ## Task list
 
 ### Phase 1 — Repo & camera layer
