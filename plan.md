@@ -161,28 +161,29 @@ uv pip install -e .
 
 ### Phase 1 — Repo & camera layer
 
-- [ ] **T01** New git repo — create `pi-webcam-v2` (or similar), clean slate
-  - `requirements.txt` with initial deps (`picamera2`, `Pillow`, `python-dotenv`)
-  - `.gitignore` covering `calibration.toml`, `.env`, `__pycache__`, image output dirs
+- [x] **T01** New git repo — created `pi_webcam2`, pushed to GitHub, cloned to Pi
+  - `pyproject.toml` replaces `requirements.txt` as dependency source
+  - `.gitignore` covers `calibration.toml`, `.env`, `__pycache__`, image output dirs
+  - `uv` used for environment management
 
 - [ ] **T02** `camera.py` — picamera2 wrapper
-  - Configure rotation, resolution, module type from config
-  - `capture(params) -> PIL.Image`
-  - `meter_light() -> float` (mean brightness of `light_region`)
-  - `meter_white() -> tuple[float, float, float]` (R/G/B means of `white_reference_region`)
+  - [x] Configure rotation, resolution from config.toml
+  - [x] Capture to file (latest_path from config)
+  - [ ] `capture(params) -> PIL.Image` — return image instead of writing directly to file
+  - [ ] `meter_light() -> float` (mean brightness of `light_region`)
+  - [ ] `meter_white() -> tuple[float, float, float]` (R/G/B means of `white_reference_region`)
+  - Note: metering functions are prerequisites for Phase 2
 
-- [ ] **T03** `config.toml` — initial version with placeholder region coordinates
-  - Use `python3 -m http.server 8080` to view first captured frame on Mac browser
-  - Identify approximate region coordinates by eye from the image
+- [x] **T03** `config.toml` — completed
+  - rotation, resolution, paths, metering regions, calibration sweep params
+  - `rotation` is per-device (local Pi = `"hflip"`, cabin Pi TBD)
+  - `module = "noir"` confirmed for local Pi (IR remote test passed)
 
-- [ ] **T04** Smoke test on local Pi — capture a single frame, verify rotation and resolution
-  - **Session 1 findings** (needs resolving next session):
-    - Rotation: local Pi camera is mounted differently from cabin Pi — transform needs to be
-      configurable per device in `config.toml` (e.g. `transform = "hvflip"` vs `"vflip"` vs `"none"`)
-    - Resolution/FoV: requesting 1920x1080 crops the sensor center instead of using full FoV.
-      Fix: set `raw={"size": (3280, 2464)}` so ISP downscales full sensor → 1920x1080
-    - Red cast: local Pi camera shows strong red tint despite standard module tuning file.
-      Likely a NoIR module — confirm physically. Affects white balance strategy.
+- [x] **T04** Smoke test — completed
+  - Full FoV fix applied: `raw={"size": (3280, 2464)}`
+  - Rotation confirmed: local Pi uses `"hflip"`, not `"hvflip"`
+  - Both Pis confirmed NoIR modules (uniform red cast + IR remote test)
+  - AWB disabled + manual ColourGains calibration needed — handled in Phase 2
 
 ### Phase 2 — Calibration
 
@@ -239,7 +240,6 @@ uv pip install -e .
 3. **Cron schedule** — how often should snapshots run? (Old code implied hourly.)
 4. **Web UI hosting** — does the FastHTML app run on the Pi itself, or somewhere else?
 5. **`white_reference_region`** — exact coordinates TBD after running `find_region.py`.
-6. **Camera module confirmation** — physically check both Pi cameras: standard (blue-tinted glass)
-   or NoIR (black sensor window)? Local Pi showing red cast despite `imx219.json` tuning file.
-7. **Per-device transform config** — local Pi and cabin Pi have different camera mounting
-   orientations. `config.toml` needs a `transform` field, not a hardcoded assumption.
+6. ~~**Camera module confirmation**~~ — resolved: both Pis confirmed NoIR (IR remote test).
+7. ~~**Per-device transform config**~~ — resolved: `rotation` field in `config.toml`,
+   local Pi = `"hflip"`, cabin Pi TBD when accessible.

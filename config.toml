@@ -1,6 +1,6 @@
 [camera]
-module = "standard"     # "standard" or "noir"
-rotation = "hvflip"     # "hvflip", "vflip", "hflip", "none"
+module = "noir"     # "standard" or "noir"
+rotation = "hflip"     # "hvflip", "vflip", "hflip", "none"
 resolution = [1920, 1080]
 
 [metering]
