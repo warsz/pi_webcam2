@@ -8,9 +8,10 @@ def main():
     cam = Picamera2()
     # 2. configure rotation 180 degrees
     config = cam.create_still_configuration(
+        raw={"size": (3280, 2464)},
         main={"size": (1920, 1080)},
         transform=Transform(vflip=True, hflip=True))
-    pring(config)
+    print(config)
     cam.configure(config)
 
     # 3. capture an image

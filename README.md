@@ -23,19 +23,35 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 
 ## Installation
 
+### On Raspberry Pi
+
 ```bash
 git clone git@github.com:warsz/pi_webcam2.git
 cd pi_webcam2
 
-# Create venv — --system-site-packages is required so picamera2 (system package) is visible.
-# --python python3.13 is required because .python-version pins to 3.11 (set on Mac),
-# but picamera2 is installed under the system Python (3.13 on Debian 13).
+# --system-site-packages: makes system-installed picamera2 visible inside the venv
+# --python python3.13: required because .python-version pins to 3.11 (set on Mac)
+#   but picamera2 is installed under system Python 3.13 on Debian 13
 uv venv --system-site-packages --python python3.13 .venv
 source .venv/bin/activate
 
-# Install from pyproject.toml (do not use -r requirements.txt)
 uv pip install -e .
 ```
+
+### On Mac (development only — no camera)
+
+```bash
+git clone git@github.com:warsz/pi_webcam2.git
+cd pi_webcam2
+
+uv venv .venv
+source .venv/bin/activate
+
+uv pip install -e .
+```
+
+Note: `picamera2` is not available on Mac. Camera code cannot be run locally —
+deploy to the Pi via git and run it there.
 
 ## Configuration
 
