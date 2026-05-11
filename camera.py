@@ -1,24 +1,36 @@
+import tomllib
 from picamera2 import Picamera2
 from libcamera import Transform
 
-# we just want to take one image and store it as latest.jpg in this folder
+TRANSFORMS = {
+    "hvflip":   Transform(vflip=True, hflip=True),
+    "vflip":    Transform(vflip=True),
+    "hflip":    Transform(hflip=True),
+    "none":     Transform(),
+}
+
+def load_config(path="config.toml"):
+    with open(path, "rb") as f:
+        return tomllib.load(f)
 
 def main():
-    # 1. open the camera: IMX219
+    cfg = load_config()
+    
+    rotation = cfg["camera"]["rotation"]
+    resolution = tuple(cfg["camera"]["resolution"])
+    latest_path = cfg["image"]["latest_path"]
+
+    transform = TRANSFORMS[rotation]
+    
     cam = Picamera2()
-    # 2. configure rotation 180 degrees
     config = cam.create_still_configuration(
         raw={"size": (3280, 2464)},
-        main={"size": (1920, 1080)},
-        transform=Transform(vflip=True, hflip=True))
-    print(config)
+        main={"size": resolution},
+        transform=transform)
     cam.configure(config)
 
-    # 3. capture an image
     cam.start()
-    # 4. save the image
-    cam.capture_file("latest.jpg") 
-    # 5. close
+    cam.capture_file(latest_path) 
     cam.close()
 
 if __name__ == "__main__":

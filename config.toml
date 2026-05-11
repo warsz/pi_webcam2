@@ -1,0 +1,25 @@
+camera]
+module = "standard"     # "standard" or "noir"
+rotation = "hvflip"     # "hvflip", "vflip", "hflip", "none"
+resolution = [1920, 1080]
+
+[metering]
+light_region = [960, 200, 980, 220]
+white_reference_region = [0, 0, 10, 10]
+
+[image]
+crop = [720, 0, 1200, 1080]
+location_name = "Olnessaeter"
+latest_path = "/home/warsz/Devel/pi_webcam2/latest.jpg"
+archive_dir = "/home/warsz/Devel/pi_webcam2/archive"
+
+[server]
+remote_dir = "/webcam/"
+protocol = "ftp" # "ftp" or "sftp" - TBD
+
+[calibration]
+bucket_count = 12
+sweep_iso = [100, 200, 400, 800, 1600]
+sweep_shutter_us = [500, 1000, 5000, 10000, 50000, 100000, 500000, 1000000, 2000000, 6000000]
+sweep_colour_gains = [[1.0, 1.0], [1.5, 1.0], [1.0, 1.5], [2.0, 1.0], [1.0, 2.0]]
+
