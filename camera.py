@@ -14,27 +14,12 @@ def load_config(path="config.toml"):
     with open(path, "rb") as f:
         return tomllib.load(f)
 
-def meter_light(cfg: dict):
-    
-    
-    # start camera
-    cam = Picamera2()
-    config = cam.create_still_configuration(
-        raw={"size": tuple(cfg["camera"]["raw_resolution"])},
-        main={"size": tuple(cfg["camera"]["resolution"])},
-        transform=TRANSFORMS[cfg["camera"]["rotation"]]
-    )
-    cam.configure(config)
-    cam.start()
-    # capture_array() -> numpy array
-    arr = cam.capture_array()
+def meter_light(arr, light_region):
     # slice the light_region patch
-    x1, y1, x2, y2 = cfg["metering"]["light_region"]
+    x1, y1, x2, y2 = light_region
     patch = arr[y1:y2, x1:x2]
     # np.mean() -> return the float
     intensity = np.mean(patch)
-    # close camera
-    cam.close()
     return intensity
     
 
@@ -45,6 +30,7 @@ def main():
     raw =cfg["camera"]["raw_resolution"]
     resolution = tuple(cfg["camera"]["resolution"])
     latest_path = cfg["image"]["latest_path"]
+    light_region = cfg["metering"]["light_region"]
 
     transform = TRANSFORMS[rotation]
     
@@ -56,6 +42,8 @@ def main():
     cam.configure(config)
 
     cam.start()
+    arr = cam.capture_array()
+    print(meter_light(arr, light_region))
     cam.capture_file(latest_path) 
     cam.close()
 
