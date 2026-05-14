@@ -2,6 +2,7 @@
 module = "noir"     # "standard" or "noir"
 rotation = "hflip"     # "hvflip", "vflip", "hflip", "none"
 resolution = [1920, 1080]
+raw_resolution = [3280, 2464]
 
 [metering]
 light_region = [960, 200, 980, 220]
