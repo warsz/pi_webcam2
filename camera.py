@@ -27,7 +27,7 @@ def main():
     cfg = load_config()
     
     rotation = cfg["camera"]["rotation"]
-    raw =cfg["camera"]["raw_resolution"]
+    raw = tuple(cfg["camera"]["raw_resolution"])
     resolution = tuple(cfg["camera"]["resolution"])
     latest_path = cfg["image"]["latest_path"]
     light_region = cfg["metering"]["light_region"]
@@ -36,7 +36,7 @@ def main():
     
     cam = Picamera2()
     config = cam.create_still_configuration(
-        raw={"size": (3280, 2464)},
+        raw={"size": raw},
         main={"size": resolution},
         transform=transform)
     cam.configure(config)
@@ -46,8 +46,6 @@ def main():
     print(meter_light(arr, light_region))
     cam.capture_file(latest_path) 
     cam.close()
-
-    print(meter_light(cfg))
 
 if __name__ == "__main__":
     main()
