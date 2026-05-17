@@ -190,13 +190,14 @@ uv pip install -e .
   - `.gitignore` covers `calibration.toml`, `.env`, `__pycache__`, image output dirs
   - `uv` used for environment management
 
-- [ ] **T02** `camera.py` — picamera2 wrapper
+- [x] **T02** `camera.py` — picamera2 wrapper
   - [x] Configure rotation, resolution from config.toml
   - [x] Capture to file (latest_path from config)
   - [x] `meter_light(arr, light_region) -> float` — pure function, takes numpy array
-  - [ ] `meter_white(arr, white_reference_region) -> tuple[float, float, float]`
-  - [ ] `capture(params) -> PIL.Image` — return image instead of writing directly to file
-  - Note: metering functions are prerequisites for Phase 2
+  - [x] `meter_white(arr, white_region) -> tuple[float, float]` — returns (r/g, r/b) ratios
+  - [x] `capture(cam, params) -> PIL.Image` — sets runtime controls, returns PIL Image
+  - Note: `white_region` still uses placeholder coords [0,0,10,10] — finalize in T09 setup page
+  - Note: config key renamed from `white_reference_region` to `white_region`
 
 - [x] **T03** `config.toml` — completed
   - rotation, resolution, paths, metering regions, calibration sweep params
@@ -263,7 +264,7 @@ uv pip install -e .
 2. **Cabin Pi OS upgrade** — needs a safe remote upgrade strategy before new code can be deployed.
 3. **Cron schedule** — how often should snapshots run? (Old code implied hourly.)
 4. **Web UI hosting** — does the FastHTML app run on the Pi itself, or somewhere else?
-5. **`white_reference_region`** — exact coordinates TBD after running `find_region.py`.
+5. **`white_region`** — exact coordinates TBD, finalized in T09 setup page.
 6. ~~**Camera module confirmation**~~ — resolved: both Pis confirmed NoIR (IR remote test).
 7. ~~**Per-device transform config**~~ — resolved: `rotation` field in `config.toml`,
    local Pi = `"hflip"`, cabin Pi TBD when accessible.

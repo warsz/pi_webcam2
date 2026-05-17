@@ -2,6 +2,7 @@ import tomllib
 from picamera2 import Picamera2
 from libcamera import Transform
 import numpy as np
+from PIL import Image
 
 TRANSFORMS = {
     "hvflip":   Transform(vflip=True, hflip=True),
@@ -34,6 +35,12 @@ def meter_white(arr,white_region):
     b = np.mean(b_arr)
     return (float(r/g), float(r/b))
 
+def capture(cam, params: dict):
+    cam.set_controls(params) # applies ISO, shutter speed, colour gains
+    arr = cam.capture_array()
+    # BGR -> RGB before converting (picamera2 returns BGR)
+    return Image.fromarray(arr[:, :, ::-1])
+
 def main():
     cfg = load_config()
     
@@ -42,6 +49,7 @@ def main():
     resolution = tuple(cfg["camera"]["resolution"])
     latest_path = cfg["image"]["latest_path"]
     light_region = cfg["metering"]["light_region"]
+    white_region = cfg["metering"]["white_region"]
 
     transform = TRANSFORMS[rotation]
     
@@ -55,7 +63,7 @@ def main():
     cam.start()
     arr = cam.capture_array()
     print(f'meter_light: {meter_light(arr, light_region)}')
-    print(f'meter_white: {meter_white(arr, light_region)}')
+    print(f'meter_white: {meter_white(arr, white_region)}')
     cam.capture_file(latest_path) 
     cam.close()
 
