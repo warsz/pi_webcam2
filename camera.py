@@ -32,7 +32,7 @@ def meter_white(arr,white_region):
     r = np.mean(r_arr)
     g = np.mean(g_arr)
     b = np.mean(b_arr)
-    return (r/g, r/b)
+    return (float(r/g), float(r/b))
 
 def main():
     cfg = load_config()
