@@ -22,6 +22,17 @@ def meter_light(arr, light_region):
     intensity = np.mean(patch)
     return intensity
     
+def meter_white(arr,white_region):
+    # slice the white_region patch
+    x1, y1, x2, y2 = white_region
+    patch = arr[y1:y2, x1:x2]
+    r_arr = patch[:, :, 2] # Red
+    g_arr = patch[:, :, 1] # Green
+    b_arr = patch[:, :, 0] # Blue
+    r = np.mean(r_arr)
+    g = np.mean(g_arr)
+    b = np.mean(b_arr)
+    return (r/g, r/b)
 
 def main():
     cfg = load_config()
@@ -43,7 +54,8 @@ def main():
 
     cam.start()
     arr = cam.capture_array()
-    print(meter_light(arr, light_region))
+    print(f'meter_light: {meter_light(arr, light_region)}')
+    print(f'meter_white: {meter_white(arr, light_region)}')
     cam.capture_file(latest_path) 
     cam.close()
 

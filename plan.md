@@ -137,6 +137,30 @@ During early phases (before FastHTML exists), images can be viewed immediately v
 python3 -m http.server 8080   # run in the image output folder on the Pi
 ```
 
+### Terminal setup (Ghostty)
+
+Three-pane layout works well for this project:
+- Left pane: Mac (editing code)
+- Right-top pane: Pi (running code, viewing output)
+- Right-bottom pane: Pi (quick edits, git operations)
+
+Split the right pane with `Cmd+Shift+-` (horizontal split).
+
+### Git workflow on Pi
+
+All edits should be made on Mac and deployed via git pull on the Pi. Editing directly
+on the Pi causes local changes that block the next pull. If you edited on the Pi and
+don't need those changes:
+
+```bash
+git checkout -- .   # discard local changes
+git pull            # then pull cleanly
+```
+
+**TODO**: tighten the deploy loop so testing on Pi is faster and there's less temptation
+to edit directly there. Options to explore: `rsync` watch script, SSH remote run from Mac,
+or a Makefile with a `deploy` target.
+
 ### Virtual environment
 
 Use `uv` for environment and package management. On the Pi, `picamera2` is a system package
@@ -169,9 +193,9 @@ uv pip install -e .
 - [ ] **T02** `camera.py` — picamera2 wrapper
   - [x] Configure rotation, resolution from config.toml
   - [x] Capture to file (latest_path from config)
+  - [x] `meter_light(arr, light_region) -> float` — pure function, takes numpy array
+  - [ ] `meter_white(arr, white_reference_region) -> tuple[float, float, float]`
   - [ ] `capture(params) -> PIL.Image` — return image instead of writing directly to file
-  - [ ] `meter_light() -> float` (mean brightness of `light_region`)
-  - [ ] `meter_white() -> tuple[float, float, float]` (R/G/B means of `white_reference_region`)
   - Note: metering functions are prerequisites for Phase 2
 
 - [x] **T03** `config.toml` — completed
