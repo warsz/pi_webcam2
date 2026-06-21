@@ -27,9 +27,9 @@ def meter_white(arr,white_region):
     # slice the white_region patch
     x1, y1, x2, y2 = white_region
     patch = arr[y1:y2, x1:x2]
-    r_arr = patch[:, :, 2] # Red
+    r_arr = patch[:, :, 0] # Red
     g_arr = patch[:, :, 1] # Green
-    b_arr = patch[:, :, 0] # Blue
+    b_arr = patch[:, :, 2] # Blue
     r = np.mean(r_arr)
     g = np.mean(g_arr)
     b = np.mean(b_arr)
@@ -38,8 +38,7 @@ def meter_white(arr,white_region):
 def capture(cam, params: dict):
     cam.set_controls(params) # applies ISO, shutter speed, colour gains
     arr = cam.capture_array()
-    # BGR -> RGB before converting (picamera2 returns BGR)
-    return Image.fromarray(arr[:, :, ::-1])
+    return Image.fromarray(arr)
 
 def main():
     cfg = load_config()
