@@ -90,6 +90,20 @@ python web/app.py
 
 The web UI is available at `http://<pi-ip>:5001` from any browser on the same network.
 
+> **Status**: `snapshot.py` and `web/app.py` are not yet implemented (Phase 3–4). During
+> development, use `python camera.py` for a single capture and serve the output folder with
+> `python3 -m http.server 8080` to view images in a browser.
+
+## Development notes
+
+- Always edit code on Mac and deploy via git (`git push` → `git pull` on Pi). Editing directly
+  on the Pi causes local changes that block the next pull.
+- `capture_array()` in picamera2 returns **RGB** format (not BGR). Channel indices in
+  `meter_white` and any future array processing must use 0=R, 1=G, 2=B.
+- White balance calibration (`run_sweep`) must be run **outdoors in daylight**. Indoor warm
+  incandescent light has essentially no blue content (r/b ≈ 479 measured), making it impossible
+  to calibrate against.
+
 ## Development
 
 See `APPROACH.md` for the development methodology used in this project.

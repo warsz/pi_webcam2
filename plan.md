@@ -196,19 +196,25 @@ uv pip install -e .
   - [x] `meter_light(arr, light_region) -> float` — pure function, takes numpy array
   - [x] `meter_white(arr, white_region) -> tuple[float, float]` — returns (r/g, r/b) ratios
   - [x] `capture(cam, params) -> PIL.Image` — sets runtime controls, returns PIL Image
-  - Note: `white_region` still uses placeholder coords [0,0,10,10] — finalize in T09 setup page
   - Note: config key renamed from `white_reference_region` to `white_region`
+  - Bug fixed: `capture_array()` returns RGB (not BGR as originally assumed) — channel indices
+    in `meter_white` corrected (0=R, 1=G, 2=B); `capture()` flip removed accordingly
+  - `white_region` set to `[550, 480, 650, 560]` (white Wi-Fi extender plug on floor)
 
 - [x] **T03** `config.toml` — completed
   - rotation, resolution, paths, metering regions, calibration sweep params
   - `rotation` is per-device (local Pi = `"hflip"`, cabin Pi TBD)
   - `module = "noir"` confirmed for local Pi (IR remote test passed)
+  - `latest_path` updated to `/home/warsz/Devel/pi_webcam2/latest.jpg`
 
 - [x] **T04** Smoke test — completed
   - Full FoV fix applied: `raw={"size": (3280, 2464)}`
   - Rotation confirmed: local Pi uses `"hflip"`, not `"hvflip"`
   - Both Pis confirmed NoIR modules (uniform red cast + IR remote test)
   - AWB disabled + manual ColourGains calibration needed — handled in Phase 2
+  - Metering verified on real hardware: `meter_light` and `meter_white` return correct values
+  - Indoor warm light gives r/b ≈ 479 (blue channel near zero) — indoor testing not useful
+    for white balance; calibration must be done outdoors in daylight
 
 ### Phase 2 — Calibration
 
@@ -264,7 +270,8 @@ uv pip install -e .
 2. **Cabin Pi OS upgrade** — needs a safe remote upgrade strategy before new code can be deployed.
 3. **Cron schedule** — how often should snapshots run? (Old code implied hourly.)
 4. **Web UI hosting** — does the FastHTML app run on the Pi itself, or somewhere else?
-5. **`white_region`** — exact coordinates TBD, finalized in T09 setup page.
+5. ~~**`white_region`**~~ — resolved: set to `[550, 480, 650, 560]` (white plug). Verify and
+   fine-tune via T09 setup page when built.
 6. ~~**Camera module confirmation**~~ — resolved: both Pis confirmed NoIR (IR remote test).
 7. ~~**Per-device transform config**~~ — resolved: `rotation` field in `config.toml`,
    local Pi = `"hflip"`, cabin Pi TBD when accessible.
