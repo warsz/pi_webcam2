@@ -61,9 +61,10 @@ def main():
     cam.configure(config)
 
     cam.start()
+    cam.set_controls({"AwbEnable": False, "ColourGains": (0.91, 0.64)})
     arr = cam.capture_array()
     print(f'meter_light: {meter_light(arr, light_region)}')
-    print(f'meter_white: {meter_white(arr, white_region)}')
+    print(f'meter_white: {meter_white(arr, white_region)}')   
     cam.capture_file(latest_path) 
     cam.close()
 
