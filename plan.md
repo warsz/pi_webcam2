@@ -220,8 +220,9 @@ uv pip install -e .
 
 - [ ] **T05** `calibrate.py` — calibration sweep
   - [x] `get_bucket(brightness) -> int` — log2 scale, capped at bucket_count-1
-  - [x] `needs_calibration(bucket) -> bool` — checks calibration.toml, True if missing or bucket absent
-  - [ ] `run_sweep(bucket)` — iterate ISO × shutter × colour_gains, score each, save best to `calibration.toml`
+  - [x] `needs_calibration(bkt) -> bool` — checks calibration.toml, True if missing or bucket absent
+  - [x] `read_file(file_name) -> dict` — generic TOML reader, used for both config and calibration
+  - [ ] `run_sweep(bkt, cam, cfg)` — params and loop structure done, capture+variance scoring next
   - [ ] `load_params(bucket) -> dict`
 
 - [ ] **T06** Test calibration sweep on local Pi — verify `calibration.toml` is written correctly
