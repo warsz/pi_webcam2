@@ -5,18 +5,19 @@ import tomllib
 
 def run_sweep(bkt, cam, cfg): 
     # get sweep params from cfg
-    isos = cfg["calibration"]["sweep_iso"]
-    shutters = cfg["calibration"]["sweep_shutter_us"]
-    c_gains = cfg["calibration"]["sweep_colour_gains"]
+    iso = cfg["calibration"]["sweep_iso"]
+    print(iso)
+    shutter = cfg["calibration"]["sweep_shutter_us"]
+    print(shutter)
+    c_gain = cfg["calibration"]["sweep_colour_gains"]
+    print(c_gain)
     # loop over all combinations
-    for i in isos:
-        for s in shutters:
-            for c in c_gains:
-                # capture
-                # score by variance
-                # track best
+    for i, s, c in product(iso, shutter, c_gain):
+        print(f"i:{i}, s:{s}, c:{c}")
+        # capture
+        # score by variance
+        # track best
     # once finished write to calibration.toml
-    print("test")
 
 def get_bucket(brightness):
     cfg_bucket_count = 8
