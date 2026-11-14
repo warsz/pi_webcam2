@@ -30,9 +30,10 @@ git clone git@github.com:warsz/pi_webcam2.git
 cd pi_webcam2
 
 # --system-site-packages: makes system-installed picamera2 visible inside the venv
-# --python python3.13: required because .python-version pins to 3.11 (set on Mac)
-#   but picamera2 is installed under system Python 3.13 on Debian 13
-uv venv --system-site-packages --python python3.13 .venv
+# --python /usr/bin/python3: must be Debian's own Python 3.13 — picamera2/libcamera
+#   are apt packages in /usr/lib/python3/dist-packages, compiled for that interpreter.
+#   A uv-managed Python (even 3.13) does not see that directory.
+uv venv --system-site-packages --python /usr/bin/python3 .venv
 source .venv/bin/activate
 
 uv pip install -e .
